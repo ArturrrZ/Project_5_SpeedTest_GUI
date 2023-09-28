@@ -1,0 +1,20 @@
+1.GUI
+
+#---------------------DONE ABOVE--------------------#
+
+2.
+
+
+
+
+def get_entry(event):
+    global entry
+    text=entry.get()
+    print(text)
+
+start_button=tk.Button(image=start_button_image,command=background_text,highlightthickness=0,background="#FFE4D6")
+start_button.grid(row=4,column=1,)
+
+# space_button=tk.Button(text="space",command=get_entry)
+# space_button.grid(row=5,column=1,pady=20)
+window.bind("<space>",get_entry)
