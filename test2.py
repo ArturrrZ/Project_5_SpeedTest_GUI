@@ -5,3 +5,7 @@ for _ in list:
 
 print(string)
 
+if 6%5==0:
+    print('x')
+else:
+    print("y")
