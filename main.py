@@ -13,6 +13,7 @@ timer=None
 correct_letters=""
 missed_letters=""
 textes=textes
+copy_texts=None
 #---------------
 #TAKE THE BEST RESULT EVER
 with open('best_result.txt','r') as file:
@@ -78,7 +79,7 @@ def start_timer(count):
 
 def get_entry(event):
     #spacebar triggered
-    global entry,x, list_of_words,written_text,score,correct_letters,missed_letters
+    global entry,x, list_of_words,written_text,score,correct_letters,missed_letters,textes
     written_text = ""
     text=entry.get().lower()
     entry.delete(first=0,last=len(text)) # 0,END
@@ -108,11 +109,14 @@ def get_entry(event):
         if (i + 1) % 15 == 0 or i == len(list_of_words) - 1:
             written_text += "\n"  # Start a new line
 
-
+    if len(list_of_words) < 2:
+        list_of_words = random.choice(textes)
+        for _ in list_of_words:
+            written_text += _ + " "
     label_rules.config(text=written_text)
 
 def get_entry_1():
-    global entry,x, list_of_words,written_text,score,correct_letters,missed_letters
+    global entry,x, list_of_words,written_text,score,correct_letters,missed_letters,textes
     written_text = ""
     text=entry.get().lower()
     entry.delete(first=0,last=len(text))
@@ -129,6 +133,11 @@ def get_entry_1():
         written_text += word + " "
         if (i + 1) % 15 == 0 or i == len(list_of_words) - 1:
             written_text += "\n"
+
+    if len(list_of_words) < 2:
+        list_of_words = random.choice(textes)
+        for _ in list_of_words:
+            written_text += _ + " "
     label_rules.config(text=written_text)
 #--------MAIN-------
 window=tk.Tk()
