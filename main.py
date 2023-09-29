@@ -5,39 +5,44 @@ from PIL import Image, ImageTk
 from textes import textes
 import random
 
-# copy_texts=textes
+#--------------------For functions--------------
+x=0
+score=0
+written_text=""
+timer=None
+correct_letters=""
+missed_letters=""
+textes=textes
+#---------------
+#TAKE THE BEST RESULT EVER
+with open('best_result.txt','r') as file:
+    best_score=float(file.read())
+print(best_score)
+#-----------------------------------------------
+
+
 def start():
-    global score,list_of_words,timer,textes,copy_texts
+    global score,list_of_words,timer,textes
     copy_texts = textes
-
-
     score=0
     list_of_words = random.choice(copy_texts)
     background_text()
 
 def background_text():
     global text, list_of_words, label_rules,score_label,score,correct_letters,missed_letters
+    #reload game
     correct_letters=''
     missed_letters=""
     score=0
-    # score_label = tk.Label(middle_frame, text=f"Scor", font=('Courier', 16, 'normal'))
     score_label.config(text=f"Score: {score}", font=('Courier', 16, 'normal'))
     written_text = ""
-
     for i, word in enumerate(list_of_words):
         written_text += word + " "
 
         # Check if 15 words have been added or if it's the last word
         if (i + 1) % 15 == 0 or i == len(list_of_words) - 1:
             written_text += "\n"  # Start a new line
-    # for _ in list_of_words:
-    #     if list_of_words.index(_) % 15 == 0:
-    #         written_text +=  "\n" +  _ + " "
-    #     else:
-    #         written_text += _ + " "
-
-
-    label_rules.config(text=written_text,)
+    label_rules.config(text=written_text)
     label_rules.grid(row=0,column=0)
     start_timer(60)
 
@@ -72,6 +77,7 @@ def start_timer(count):
     #     count_sec = f"0{count_sec}"
 
 def get_entry(event):
+    #spacebar triggered
     global entry,x, list_of_words,written_text,score,correct_letters,missed_letters
     written_text = ""
     text=entry.get().lower()
@@ -104,94 +110,44 @@ def get_entry(event):
 
 
     label_rules.config(text=written_text)
-    # print(written_text)
-    # print(list_of_words)
-    # print(len(text))
-    # print(f"Original text: {list_of_words[0]}\nYou typed: {text}\nTheir types: {type(list_of_words[0])} and {type(text)}")
-    x+=0
 
-score=0
 def get_entry_1():
     global entry,x, list_of_words,written_text,score,correct_letters,missed_letters
     written_text = ""
     text=entry.get().lower()
     entry.delete(first=0,last=len(text))
-    # print(text)
     text_no_space = text.strip()
-    # print(len(list_of_words[x]))
     if text_no_space == list_of_words[x]:
-        # print("correct")
         score+=1
         score_label.config(text=f"Score: {score}", font=('Courier', 16, 'normal'))
-
-
-        # print(f"Score: {score}")
-        # list_of_words[x] = ""
         correct_letters += list_of_words[x]
         del list_of_words[x]
     else:
         missed_letters += text_no_space
-        # print('not correct')
         del list_of_words[x]
-
-    y=0
     for i, word in enumerate(list_of_words):
         written_text += word + " "
-
-        # Check if 15 words have been added or if it's the last word
         if (i + 1) % 15 == 0 or i == len(list_of_words) - 1:
-            written_text += "\n"  # Start a new line
-    # print(len(written_text))
+            written_text += "\n"
     label_rules.config(text=written_text)
-    # print(written_text)
-    # print(list_of_words)
-    # print(f"LENGTH: {len(written_text)}")
-    # print(
-    #     f"Original text: {list_of_words[0]}\nYou typed: {text}\nTheir types: {type(list_of_words[0])} and {type(text)}")
-    x += 0
-#--------------------For functions
-
-x=0
-written_text=""
-timer=None
-correct_letters=""
-missed_letters=""
-#TAKE THE BEST RESULT EVER
-with open('best_result.txt','r') as file:
-    best_score=float(file.read())
-print(best_score)
-#---------------
-
+#--------MAIN-------
 window=tk.Tk()
 window.title("Text Writing Speed Test")
 window.minsize(1024,720)
 window.config(bg='#FFE4D6',pady=50,padx=50)
-#INVISIBLE TO HELP ME WITH GRID
-invisible_l_1=tk.Label(text="",background="#FFE4D6",padx=90)
-invisible_l_1.grid(row=1,column=0)
+
 #FRAMES
 top_frame=tk.Frame(window,height=50,width=400)
 top_frame.grid(row=0,column=1)
 
 middle_frame=tk.Frame(window,height=400,width=520,pady=100,)
 middle_frame.grid(row=2,column=1)
-
-entry=tk.Entry(width=70)
+#ENTRY
+entry=tk.Entry(width=50)
 entry.focus()
 entry.grid(row=3,column=1,pady=20)
-
-
-
-
-start_pillow_image=Image.open("Image.png")
-# print(start_pillow_image.size)
-start_pillow_image=start_pillow_image.resize((36*4,9*4))
-# print(start_pillow_image.size)
-start_button_image=ImageTk.PhotoImage(start_pillow_image)
-# start_pillow_image.resize(())
-
 #LABELS
-text="Type words in entry below Before\n start tap the button PLAY NOW"
+text="Type words in entry below. Before start tap the button 'PLAY NOW'.\n You can use spacebar or button to go to the next word"
 label_rules=tk.Label(middle_frame,text=text)
 label_rules.grid(row=0,column=1)
 
@@ -200,21 +156,24 @@ title_label.pack()
 
 score_label=tk.Label(middle_frame,text=f"", font=('Courier',16,'normal'))
 score_label.grid(row=1,column=0)
+
 time=60
 timer_label=tk.Label(text=f"TIMER:\n\n"
                           f"{time} seconds",font=('Courier',16,'normal'),bg='#FFE4D6')
-
 timer_label.grid(row=2,column=0)
 
 best_result_label=tk.Label(text=f"Best result: {best_score}\n words per minute")
 best_result_label.grid(row=3,column=0)
-
-start_button=tk.Button(image=start_button_image,command=start,highlightthickness=0,background="#FFE4D6")
-start_button.grid(row=4,column=1,)
-#check for correct word
+#try on the rules
 list_of_words=text.lower().split()
-# print(list_of_words)
-space_button=tk.Button(text="space",command=get_entry_1)
+#Buttons
+start_pillow_image=Image.open("Image.png")
+start_pillow_image=start_pillow_image.resize((36*4,9*4))
+start_button_image=ImageTk.PhotoImage(start_pillow_image)
+start_button=tk.Button(image=start_button_image,command=start,highlightthickness=0,background="#FFE4D6")
+start_button.grid(row=4,column=1)
+
+space_button=tk.Button(text="spacebar",command=get_entry_1,width=30)
 space_button.grid(row=5,column=1,pady=20)
 window.bind("<space>",get_entry)
 
