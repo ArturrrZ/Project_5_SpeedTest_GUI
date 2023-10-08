@@ -12,6 +12,7 @@ written_text=""
 timer=None
 correct_letters=""
 missed_letters=""
+#text as list
 textes=textes
 copy_texts=None
 #---------------
