@@ -49,7 +49,9 @@ def background_text():
     start_timer(60)
 
 def start_timer(count):
-    global score,best_score
+    global score,best_score,timer
+    if timer is not None:
+        window.after_cancel(timer)
     count_sec = count % 61
     if count_sec < 10:
         count_sec = f"0{count_sec}"
@@ -57,7 +59,7 @@ def start_timer(count):
     timer_label.config(text=f"TIMER:\n\n"
                           f"{count_sec} seconds",font=('Courier',16,'normal'),bg='#FFE4D6')
     if count > 0:
-        global timer
+        # global timer
         timer = window.after(1000, start_timer, count - 1)
     else:
         # print(correct_letters)
